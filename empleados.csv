@@ -1,0 +1,6 @@
+id_empleado,nombre,email,dias_vacaciones,antiguedad_anios,fecha_ingreso
+101,Juan Pérez,juan.perez@empresa.com,14,3,2023-01-15
+102,María Gómez,maria.gomez@empresa.com,21,8,2018-03-20
+103,Carlos López,carlos.lopez@empresa.com,7,1,2025-02-10
+104,Ana Martínez,ana.martinez@empresa.com,28,12,2014-06-01
+105,Pedro Sánchez,pedro.sanchez@empresa.com,10,2,2024-07-19
