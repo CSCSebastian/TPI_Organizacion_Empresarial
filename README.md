@@ -21,4 +21,5 @@ Bot para solicitud de vacaciones desarrollado para TP Integrador de Organizació
 - Máquina de estados
 
 ## Autor
-[Tu nombre]
+Crespi Claudio Sebastian
+Doglioli Nicolas Daniel

@@ -298,52 +298,73 @@ def main():
     print("      🏢 CHATBOT DE GESTION DE VACACIONES 🏢")
     print("      Con persistencia en CSV")
     print("=" * 60)
-    
-    # Mostrar empleados registrados
-    print("\n📋 EMPLEADOS REGISTRADOS:")
-    print("─" * 40)
-    for id_emp, datos in empleados.items():
-        print(f"   ID {id_emp}  →  {datos['nombre']}  (saldo: {datos['saldo']} dias)")
-    print("─" * 40)
-    
-    # Seleccionar empleado
+
     while True:
-        try:
-            emp_id = int(input("\n👉 Ingresa tu ID de empleado: "))
-            if emp_id in empleados:
+        # Mostrar empleados registrados
+        print("\n📋 EMPLEADOS REGISTRADOS:")
+        print("─" * 40)
+        for id_emp, datos in empleados.items():
+            print(f"   ID {id_emp}  →  {datos['nombre']}  (saldo: {datos['saldo']} dias)")
+        print("─" * 40)
+        
+        # Seleccionar empleado
+        while True:
+            try:
+                emp_id = int(input("\n👉 Ingresa tu ID de empleado: "))
+                if emp_id in empleados:
+                    break
+                print("❌ ID no encontrado. Usa: 101, 102, 103, 104 o 105")
+            except ValueError:
+                print("❌ Ingresa un numero valido")
+        
+        # Bucle principal - muestra menu hasta que el usuario salga
+        print(mostrar_menu(emp_id))
+        
+        while True:
+            opcion = input("> ").strip()
+            
+            if opcion == "0":
+                print("\n" + "=" * 60)
+                print(f"   📊 Solicitudes realizadas en esta sesion: {len([s for s in solicitudes if s['empleado_id'] == emp_id])}")
+                print("=" * 60)
                 break
-            print("❌ ID no encontrado. Usa: 101, 102, 103, 104 o 105")
-        except ValueError:
-            print("❌ Ingresa un numero valido")
-    
-    # Bucle principal - muestra menu hasta que el usuario salga
-    print(mostrar_menu(emp_id))
-    
-    while True:
-        opcion = input("> ").strip()
+            
+            respuesta = procesar_mensaje(emp_id, opcion)
+            
+            if respuesta == "SALIR":
+                print("\n" + "=" * 60)
+                print(f"   📊 Solicitudes realizadas en esta sesion: {len([s for s in solicitudes if s['empleado_id'] == emp_id])}")
+                print("=" * 60)
+                break
+            
+            # Mostrar respuesta del bot
+            print(respuesta)
+            
+            # Si no estamos en medio de una solicitud, mostrar el menu nuevamente
+            if emp_id in estados and estados[emp_id]["paso"] == "menu":
+                print(mostrar_menu(emp_id))
         
-        if opcion == "0":
-            print("\n" + "=" * 60)
-            print("   👋 ¡Hasta luego! Gracias por usar el sistema.")
-            print(f"   📊 Total de solicitudes realizadas: {len([s for s in solicitudes if s['empleado_id'] == emp_id])}")
-            print("=" * 60)
-            break
+        # Preguntar si consultar otro empleado o salir del programa
+        print("\n╔══════════════════════════════════════════════════════════╗")
+        print("║              ¿QUE DESEAS HACER AHORA?                   ║")
+        print("╠══════════════════════════════════════════════════════════╣")
+        print("║                                                          ║")
+        print("║     [1]  Consultar otro empleado                         ║")
+        print("║     [0]  Salir del programa                              ║")
+        print("║                                                          ║")
+        print("╚══════════════════════════════════════════════════════════╝")
         
-        respuesta = procesar_mensaje(emp_id, opcion)
-        
-        if respuesta == "SALIR":
-            print("\n" + "=" * 60)
-            print("   👋 ¡Hasta luego! Gracias por usar el sistema.")
-            print(f"   📊 Total de solicitudes realizadas: {len([s for s in solicitudes if s['empleado_id'] == emp_id])}")
-            print("=" * 60)
-            break
-        
-        # Mostrar respuesta del bot
-        print(respuesta)
-        
-        # Si no estamos en medio de una solicitud, mostrar el menu nuevamente
-        if emp_id in estados and estados[emp_id]["paso"] == "menu":
-            print(mostrar_menu(emp_id))
+        while True:
+            siguiente = input("👉 Elige una opcion (1 o 0): ").strip()
+            if siguiente == "1":
+                break
+            elif siguiente == "0":
+                print("\n" + "=" * 60)
+                print("   👋 ¡Hasta luego! Gracias por usar el sistema.")
+                print("=" * 60)
+                return
+            else:
+                print("❌ Opcion invalida. Ingresa 1 o 0.")
 
 # ==================== EJECUTAR ====================
 if __name__ == "__main__":
