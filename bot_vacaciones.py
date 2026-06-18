@@ -9,15 +9,35 @@ import csv                      # Para leer y escribir el archivo de persistenci
 import os                       # Para verificar existencia de archivos y limpiar pantalla
 
 # ==================== BASE DE DATOS ====================
-# Diccionario que simula la base de datos de empleados.
+# Diccionario que almacena los empleados cargados desde el CSV.
 # Clave: ID del empleado | Valor: nombre y saldo de dias disponibles.
-# empleados = {
-#     101: {"nombre": "Juan Perez", "saldo": 14},
-#     102: {"nombre": "Maria Gomez", "saldo": 21},
-#     103: {"nombre": "Carlos Lopez", "saldo": 7},
-#     104: {"nombre": "Ana Martinez", "saldo": 28},
-#     105: {"nombre": "Pedro Sanchez", "saldo": 10},
-# }
+empleados = {}
+
+def cargar_empleados():
+    """Lee empleados.csv y construye el diccionario global de empleados."""
+    global empleados
+    empleados = {}
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'empleados.csv')
+    if not os.path.exists(ruta):
+        print("⚠️ No se encontro empleados.csv")
+        return
+    try:
+        with open(ruta, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                try:
+                    emp_id = int(row['id_empleado'])
+                    empleados[emp_id] = {
+                        'nombre': row['nombre'],
+                        'saldo':  int(row['dias_vacaciones'])
+                    }
+                except (ValueError, KeyError):
+                    continue
+    except Exception as e:
+        print(f"⚠️ Error al leer empleados.csv: {e}")
+
+cargar_empleados()
+print(f"👥 {len(empleados)} empleados cargados desde CSV")
 
 # Contador global para asignar IDs unicos a cada nueva solicitud
 ultimo_id_solicitud = 0
